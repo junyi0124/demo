@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using OdeToFood.Services;
 using Microsoft.AspNet.Routing;
 using OdeToFood.Models;
+using Microsoft.Data.Entity;
 
 namespace OdeToFood
 {
@@ -30,10 +31,16 @@ namespace OdeToFood
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
+            // ef
+            services.AddEntityFramework()
+                .AddSqlServer()
+                .AddDbContext<OdeToFoodDbContext>(
+                    options => options.UseSqlServer(Config["database:connectionString"])
+                );
             services.AddSingleton(provider => Config);
             services.AddSingleton<IGreeter, Greeter>();
-            services.AddTransient<IRestaurantData, InMemoryData>();
-            services.AddMvc();
+            services.AddTransient<IRestaurantData, SqlRestaurantData>();
             // request  => [Logger] => [Authorizer] => [Router] => [???Handle] =>
             // response <= return [Loger] <= return [Authorizer] <= return [Router]
         }

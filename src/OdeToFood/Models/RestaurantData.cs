@@ -10,8 +10,8 @@ namespace OdeToFood.Models
         List<Restaurant> GetAll();
         Restaurant Detail(int id);
         void Add(Restaurant r);
-        void Update(Restaurant r);
-        void Delete(Restaurant r);
+        int Update(Restaurant model);
+        //void Delete(Restaurant r);
     }
 
     public class InMemoryData : IRestaurantData
@@ -31,11 +31,6 @@ namespace OdeToFood.Models
             throw new NotImplementedException();
         }
 
-        public void Delete(Restaurant r)
-        {
-            throw new NotImplementedException();
-        }
-
         public Restaurant Detail(int id)
         {
             return restaurants.FirstOrDefault(r => r.Id == id);
@@ -46,9 +41,41 @@ namespace OdeToFood.Models
             return restaurants;
         }
 
-        public void Update(Restaurant r)
+        public int Update(Restaurant model)
         {
             throw new NotImplementedException();
+            return 0;
+        }
+    }
+
+    public class SqlRestaurantData : IRestaurantData
+    {
+        private OdeToFoodDbContext _ctx;
+
+        public SqlRestaurantData(OdeToFoodDbContext ctx)
+        {
+            _ctx = ctx;
+        }
+        public void Add(Restaurant r)
+        {
+            _ctx.Add(r);
+            _ctx.SaveChanges();
+        }
+
+        public Restaurant Detail(int id)
+        {
+            return _ctx.Restaurants.FirstOrDefault(r => r.Id == id);
+        }
+
+        public List<Restaurant> GetAll()
+        {
+            return _ctx.Restaurants.ToList();
+        }
+
+        public int Update(Restaurant model)
+        {
+            _ctx.Update(model);
+            return _ctx.SaveChanges();
         }
     }
 }

@@ -1,18 +1,20 @@
 ﻿@model IEnumerable<OdeToFood.Models.Restaurant>
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Restaurant Index</title>
-</head>
-<body>
-  <table>
-    @foreach (var item in Model)
-    {
+@{
+    ViewBag.Title = "Welcome!!!";
+}
+<h1>Welcome!!!</h1>
+<h3>
+  <a asp-action="Create">Create New One</a>
+</h3>
+<table>
+  @foreach (var item in Model)
+  {
       <tr>
-        <td>@Html.ActionLink("Details", "Details", new { item.Id })</td>
         <td>@item.Name</td>
+        <td>
+          <a asp-action="Details" asp-route-id="@item.Id">Details</a>|
+          <a asp-action="Edit" asp-route-id="@item.Id">Details</a>|
+        </td>
       </tr>
-    }
-  </table>
-</body>
-</html>
+  }
+</table>

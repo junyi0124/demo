@@ -1,3 +1,6 @@
 {
-	"greeting": "A configurable greeting to you"
+  "greeting": "A configurable greeting to you",
+  "database": {
+    "connectionString": "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=OdeToFood;"
+  }
 }
