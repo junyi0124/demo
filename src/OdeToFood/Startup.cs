@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Builder;
+﻿using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +7,7 @@ using OdeToFood.Services;
 using Microsoft.AspNet.Routing;
 using OdeToFood.Models;
 using Microsoft.Data.Entity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace OdeToFood
 {
@@ -38,6 +35,10 @@ namespace OdeToFood
                 .AddDbContext<OdeToFoodDbContext>(
                     options => options.UseSqlServer(Config["database:connectionString"])
                 );
+
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<OdeToFoodDbContext>();
+
             services.AddSingleton(provider => Config);
             services.AddSingleton<IGreeter, Greeter>();
             services.AddTransient<IRestaurantData, SqlRestaurantData>();
@@ -63,6 +64,8 @@ namespace OdeToFood
             app.UseDefaultFiles();
 
             app.UseStaticFiles();
+
+            app.UseIdentity();
 
             app.UseMvc(ConfigureRoute);
 
